@@ -3,6 +3,8 @@ from typing import Optional, Tuple
 import tensorflow as tf
 from tensorflow.keras.layers import Conv2D
 
+__all__ = ["contracting_block", "expanding_block", "centered_crop"]
+
 
 def _conv2d(
     filters, kernel_size=3, activation="relu", kernel_initializer="he_normal", **kwargs
@@ -59,9 +61,7 @@ def expanding_block(inputs: tf.Tensor, channels: Optional[int] = None) -> tf.Ten
 
 
 def centered_crop(inputs: tf.Tensor, shape: Tuple[int, int]) -> tf.Tensor:
-    """Resize inputs to shape.
-
-    :param inputs: """
+    """Resize inputs to shape."""
     _, old_h, old_w, _ = inputs.shape
     h, w = shape
     diff_h = old_h - h
