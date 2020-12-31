@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Tuple
 
 import tensorflow as tf
 from tensorflow.keras.layers import Conv2D
@@ -56,3 +56,18 @@ def expanding_block(inputs: tf.Tensor, channels: Optional[int] = None) -> tf.Ten
     conv1 = _conv2d(channels)
     conv2 = _conv2d(channels)
     return conv1(conv2(inputs))
+
+
+def centered_crop(inputs: tf.Tensor, shape: Tuple[int, int]) -> tf.Tensor:
+    """Resize inputs to shape.
+
+    :param inputs: """
+    _, old_h, old_w, _ = inputs.shape
+    h, w = shape
+    diff_h = old_h - h
+    diff_w = old_w - w
+    offset_top = diff_h // 2
+    offset_bottom = diff_h - offset_top
+    offset_left = diff_w // 2
+    offset_right = diff_w - offset_left
+    return inputs[:, offset_top:-offset_bottom, offset_left:-offset_right, :]
