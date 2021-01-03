@@ -4,12 +4,15 @@ import unet.core
 
 
 class UNet(tf.keras.layers.Layer):
-    def __init__(self, depth=4, units=None):
+    def __init__(self, depth=4, units=None, shrink_dims=False):
         super().__init__()
         self.depth = depth
         self.units = units
+        self.shrink_dims = shrink_dims
 
     def build(self, input_shape):
+        if not self.shrink_dims:
+            return
         s = 8
         for _ in range(self.depth):
             s *= 2
@@ -37,7 +40,8 @@ class UNet(tf.keras.layers.Layer):
                 channels // 2, 2, padding="same", strides=(2, 2)
             )(block)
             _, h, w, _ = block.shape
-            path = unet.core.centered_crop(path, (h, w))
+            if self.shrink_dims:
+                path = unet.core.centered_crop(path, (h, w))
             block = tf.concat([path, block], axis=3)
             block = unet.core.expanding_block(block)
         if self.units is None:
