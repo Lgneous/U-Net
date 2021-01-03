@@ -7,7 +7,7 @@ setup(
     url="https://github.com/Lgneous/U-Net",
     license="MIT",
     packages=["unet"],
-    install_requires=["tensorflow==2.4.0"],
+    install_requires=["tensorflow-gpu==2.4.0"],
     setup_requires=["setuptools-scm==3.3.3"],
     classifiers=[
         "Development Status :: 1 - Planning",
